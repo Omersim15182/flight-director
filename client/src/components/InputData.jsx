@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import axios from "axios";
 
 const style = {
   position: "absolute",
@@ -25,10 +26,22 @@ export default function InputData(props) {
   const [compass, setCompass] = useState("");
   const [horizontalAngle, setHorizontalAngle] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     props.altitude(altitude);
     props.compass(compass);
     props.horizontalAngle(horizontalAngle);
+
+    let data = {
+      altitude: altitude,
+      compass: compass,
+      horizontalAngle: horizontalAngle,
+    };
+    try {
+      const response = await axios.post("http://localhost:3000/sendData", data);
+      console.log("Server Response:", response.data);
+    } catch (error) {
+      console.log(error);
+    }
 
     console.log("Altitude:", altitude);
     console.log("Compass:", compass);
